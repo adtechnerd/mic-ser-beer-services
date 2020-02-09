@@ -3,6 +3,7 @@ package com.futuristic.beerservices.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.futuristic.beerservices.web.model.BeerDto;
+import com.futuristic.beerservices.web.model.BeerStyle;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -31,7 +33,7 @@ class BeerControllerTest {
 
     @Test
     void saveBeer() throws Exception {
-        BeerDto beerDto = BeerDto.builder().build();
+        BeerDto beerDto = BeerDto.builder().beerName("king").beerStyle(BeerStyle.ALE).upc(21231L).price(new BigDecimal(1100.00)).quantityOnHand(1).build();
         String beerDtoAsString = mapper.writeValueAsString(beerDto);
 
         mockMvc.perform(post("/api/v1/beer/").
@@ -43,7 +45,7 @@ class BeerControllerTest {
 
     @Test
     void updateBeerById() throws Exception {
-        BeerDto beerDto = BeerDto.builder().build();
+        BeerDto beerDto = BeerDto.builder().beerName("king").beerStyle(BeerStyle.ALE).upc(21231L).price(new BigDecimal(1100.00)).quantityOnHand(1).build();
         String beerDtoAsString = mapper.writeValueAsString(beerDto);
 
         mockMvc.perform(put("/api/v1/beer/"+ UUID.randomUUID().toString()).
