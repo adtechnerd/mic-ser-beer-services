@@ -2,11 +2,14 @@ package com.futuristic.beerservices.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.futuristic.beerservices.domain.Beer;
+import com.futuristic.beerservices.service.BeerService;
 import com.futuristic.beerservices.web.model.BeerDto;
 import com.futuristic.beerservices.web.model.BeerStyle;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -14,6 +17,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,6 +32,12 @@ class BeerControllerTest {
     @Autowired
     ObjectMapper mapper;
 
+    @MockBean
+    BeerService beerService;
+
+    private static final String BEER_UPC_1 = "0987654321";
+    private static final String BEER_UPC_2 = "0987654322";
+
     @Test
     void getBeerById() throws Exception {
         mockMvc.perform(get("/api/v1/beer/" + UUID.randomUUID().toString()).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
@@ -33,7 +45,8 @@ class BeerControllerTest {
 
     @Test
     void saveBeer() throws Exception {
-        BeerDto beerDto = BeerDto.builder().beerName("king").beerStyle(BeerStyle.ALE).upc(21231L).price(new BigDecimal(1100.00)).quantityOnHand(1).build();
+        when(beerService.saveBeer(BeerDto.builder().build())).thenReturn(BeerDto.builder().build());
+        BeerDto beerDto = BeerDto.builder().beerName("king").beerStyle(BeerStyle.ALE).upc(BEER_UPC_1).price(new BigDecimal(1100.00)).quantityOnHand(1).build();
         String beerDtoAsString = mapper.writeValueAsString(beerDto);
 
         mockMvc.perform(post("/api/v1/beer/").
@@ -45,7 +58,8 @@ class BeerControllerTest {
 
     @Test
     void updateBeerById() throws Exception {
-        BeerDto beerDto = BeerDto.builder().beerName("king").beerStyle(BeerStyle.ALE).upc(21231L).price(new BigDecimal(1100.00)).quantityOnHand(1).build();
+        when(beerService.updateBeerById(UUID.randomUUID(), BeerDto.builder().build())).thenReturn(BeerDto.builder().build());
+        BeerDto beerDto = BeerDto.builder().beerName("king").beerStyle(BeerStyle.ALE).upc(BEER_UPC_2).price(new BigDecimal(1100.00)).quantityOnHand(1).build();
         String beerDtoAsString = mapper.writeValueAsString(beerDto);
 
         mockMvc.perform(put("/api/v1/beer/"+ UUID.randomUUID().toString()).
@@ -55,5 +69,5 @@ class BeerControllerTest {
                 andExpect(status().isNoContent());
     }
 
-    ;
+
 }
