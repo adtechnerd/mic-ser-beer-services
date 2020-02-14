@@ -1,6 +1,5 @@
 package com.futuristic.beerservices.web.mapper;
 
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -12,7 +11,6 @@ import java.time.ZoneOffset;
  */
 @Component
 public class DateMapper {
-
     public OffsetDateTime asOffsetDateTime(Timestamp ts){
         if (ts != null){
             return OffsetDateTime.of(ts.toLocalDateTime().getYear(), ts.toLocalDateTime().getMonthValue(),
@@ -30,5 +28,4 @@ public class DateMapper {
             return null;
         }
     }
-
 }

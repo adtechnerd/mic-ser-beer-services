@@ -4,6 +4,7 @@ import com.futuristic.beerservices.service.BeerService;
 import com.futuristic.beerservices.web.model.BeerDto;
 import com.futuristic.beerservices.web.model.BeerPageList;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,10 +19,9 @@ import java.util.UUID;
  */
 @RequestMapping("/api/v1/beer")
 @RestController
-@RequiredArgsConstructor
 public class BeerController {
-
-    private final BeerService beerService;
+    @Autowired
+    private BeerService beerService;
 
     private static final Integer PAGE_NUMBER = 0;
     private static final Integer PAGE_SIZE = 10;
@@ -61,13 +61,12 @@ public class BeerController {
 
     @PostMapping
     public ResponseEntity saveBeer(@RequestBody @Valid BeerDto beerDto) {
-        //todo: implementation
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity(beerService.saveBeer(beerDto), HttpStatus.CREATED);
     }
 
     @PutMapping({"/{beerId}"})
     public ResponseEntity updateBeerById(@PathVariable("beerId") UUID beerId, @Valid @RequestBody BeerDto beerDto) {
-        //todo: implementation
+        beerService.updateBeerById(beerId, beerDto);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

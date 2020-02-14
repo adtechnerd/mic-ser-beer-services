@@ -6,8 +6,10 @@ import com.futuristic.beerservices.web.controller.NotFoundException;
 import com.futuristic.beerservices.web.mapper.BeerMapper;
 import com.futuristic.beerservices.web.model.BeerDto;
 import com.futuristic.beerservices.web.model.BeerPageList;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -21,11 +23,14 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class BeerServiceImpl implements BeerService {
 
-    private final BeerRepository beerRepository;
-    private final BeerMapper beerMapper;
+    @Autowired
+    private BeerRepository beerRepository;
+
+    @Autowired
+    private BeerMapper beerMapper;
 
     @Override
     public BeerPageList listBeers(String beerName, String beerStyle, PageRequest of) {
@@ -49,5 +54,15 @@ public class BeerServiceImpl implements BeerService {
     public BeerDto getBeerById(UUID beerId) {
         log.debug("calling repo to get beer by id");
         return beerMapper.beerToBeerDto(beerRepository.findById(beerId).orElseThrow(NotFoundException::new));
+    }
+
+    @Override
+    public BeerDto saveBeer(BeerDto beerDto) {
+        return null;
+    }
+
+    @Override
+    public BeerDto updateBeerById(UUID id, BeerDto beerDto) {
+        return null;
     }
 }

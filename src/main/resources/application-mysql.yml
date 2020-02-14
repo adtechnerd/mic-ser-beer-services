@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/beerservice
+    username: aditya
+    password: Adinath89@
+    driver-class-name:
